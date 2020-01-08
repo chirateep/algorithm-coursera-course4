@@ -1,5 +1,6 @@
-#Uses python3
+# Uses python3
 import sys
+
 
 # Return the trie built from patterns
 # in the form of a dictionary of dictionaries,

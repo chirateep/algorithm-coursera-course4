@@ -3,23 +3,26 @@ import sys
 
 NA = -1
 
+
 class Node:
-	def __init__ (self):
-		self.next = [NA] * 4
+    def __init__(self):
+        self.next = [NA] * 4
 
-def solve (text, n, patterns):
-	result = []
 
-	// write your code here
+def solve(text, n, patterns):
+    result = []
 
-	return result
+    # write your code here
 
-text = sys.stdin.readline ().strip ()
-n = int (sys.stdin.readline ().strip ())
+    return result
+
+
+text = sys.stdin.readline().strip()
+n = int(sys.stdin.readline().strip())
 patterns = []
-for i in range (n):
-	patterns += [sys.stdin.readline ().strip ()]
+for i in range(n):
+    patterns += [sys.stdin.readline().strip()]
 
-ans = solve (text, n, patterns)
+ans = solve(text, n, patterns)
 
-sys.stdout.write (' '.join (map (str, ans)) + '\n')
+sys.stdout.write(' '.join(map(str, ans)) + '\n')
