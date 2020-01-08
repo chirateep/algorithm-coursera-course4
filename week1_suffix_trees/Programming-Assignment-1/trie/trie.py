@@ -12,7 +12,23 @@ import sys
 # values are the node IDs to which these edges lead.
 def build_trie(patterns):
     tree = dict()
-    # write your code here
+    node_id = 0
+    max_node_id = 0
+    tree[node_id] = dict()
+
+    for index, pattern in enumerate(patterns):
+        node_id = 0
+        current_node = tree[node_id]
+        for i in range(len(pattern)):
+            current_symbol = pattern[i]
+            if current_symbol in current_node:
+                node_id = current_node[current_symbol]
+                current_node = tree[node_id]
+            else:
+                tree[max_node_id + 1] = dict()
+                current_node[current_symbol] = max_node_id + 1
+                current_node = tree[max_node_id + 1]
+                max_node_id += 1
     return tree
 
 
