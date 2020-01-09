@@ -1,5 +1,8 @@
 # python3
 import sys
+import copy
+
+from collections import deque
 
 NA = -1
 
@@ -9,10 +12,65 @@ class Node:
         self.next = [NA] * 4
 
 
+def build_trie(patterns):
+    tree = dict()
+    node_id = 0
+    max_node_id = 0
+    tree[node_id] = dict()
+
+    for index, pattern in enumerate(patterns):
+        node_id = 0
+        current_node = tree[node_id]
+        for i in range(len(pattern)):
+            current_symbol = pattern[i]
+            if current_symbol in current_node:
+                node_id = current_node[current_symbol]
+                current_node = tree[node_id]
+            else:
+                tree[max_node_id + 1] = dict()
+                current_node[current_symbol] = max_node_id + 1
+                current_node = tree[max_node_id + 1]
+                max_node_id += 1
+    return tree
+
+
+def prefix_trie_matching(text, trie):
+    text_local = copy.deepcopy(text)
+    symbol = text_local.popleft()
+    node_id = 0
+    while True:
+        # print(node_id, symbol)
+        if trie[node_id] == dict():
+            return True
+        elif symbol in trie[node_id]:
+            node_id = trie[node_id][symbol]
+            if text_local:
+                symbol = text_local.popleft()
+        else:
+            return False
+
+
+def trie_matching(text, trie, len_pattern):
+    result = []
+    index = 0
+    for i in range(0, len(text) - len(patterns) + 1):
+        if prefix_trie_matching(text, trie):
+            result.append(index)
+        index += 1
+        text.popleft()
+
+    return result
+
+
 def solve(text, n, patterns):
     result = []
 
-    # write your code here
+    trie = build_trie(patterns)
+    # print(trie)
+
+    for pattern in patterns:
+        result_pattern = trie_matching(deque(text), trie, len(pattern))
+        result = result_pattern
 
     return result
 
