@@ -1,6 +1,5 @@
 # python3
 import sys
-import copy
 
 from collections import deque
 
@@ -35,7 +34,7 @@ def build_trie(patterns):
 
 
 def prefix_trie_matching(text, trie):
-    text_local = copy.deepcopy(text)
+    text_local = deque(text)
     symbol = text_local.popleft()
     node_id = 0
     while True:
@@ -46,18 +45,20 @@ def prefix_trie_matching(text, trie):
             node_id = trie[node_id][symbol]
             if text_local:
                 symbol = text_local.popleft()
+            elif trie[node_id] != dict():
+                return False
         else:
             return False
 
 
-def trie_matching(text, trie, len_pattern):
+def trie_matching(text, trie):
     result = []
     index = 0
-    for i in range(0, len(text) - len(patterns) + 1):
+    while text:
         if prefix_trie_matching(text, trie):
             result.append(index)
         index += 1
-        text.popleft()
+        text = text[1:]
 
     return result
 
@@ -68,9 +69,7 @@ def solve(text, n, patterns):
     trie = build_trie(patterns)
     # print(trie)
 
-    for pattern in patterns:
-        result_pattern = trie_matching(deque(text), trie, len(pattern))
-        result = result_pattern
+    result = trie_matching(text, trie)
 
     return result
 
