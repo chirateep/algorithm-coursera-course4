@@ -21,16 +21,24 @@ def build_trie(patterns):
     for index, pattern in enumerate(patterns):
         node_id = 0
         current_node = tree[node_id]
+        end_node = current_node
         for i in range(len(pattern)):
             current_symbol = pattern[i]
             if current_symbol in current_node:
-                node_id = current_node[current_symbol]
+                end_node = current_node
+                node_id = current_node[current_symbol][0]
                 current_node = tree[node_id]
             else:
                 tree[max_node_id + 1] = dict()
-                current_node[current_symbol] = max_node_id + 1
+                current_node[current_symbol] = (max_node_id + 1, "P")
+                end_node = current_node
                 current_node = tree[max_node_id + 1]
                 max_node_id += 1
+            # print(current_node)
+        # print(end_node)
+        end_node[current_symbol] = (end_node[current_symbol][0], "E")
+        # print(tree)
+        # print("----------")
     return tree
 
 
@@ -43,7 +51,9 @@ def prefix_trie_matching(text, trie):
         if trie[node_id] == dict():
             return True
         elif symbol in trie[node_id]:
-            node_id = trie[node_id][symbol]
+            if trie[node_id][symbol][1] == "E":
+                return True
+            node_id = trie[node_id][symbol][0]
             if text_local:
                 symbol = text_local.popleft()
             elif trie[node_id] != dict():
@@ -68,7 +78,7 @@ def solve(text, n, patterns):
     result = []
 
     trie = build_trie(patterns)
-    print(trie)
+    # print(trie)
 
     result = trie_matching(text, trie)
 
